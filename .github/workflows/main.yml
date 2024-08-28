@@ -50,11 +50,6 @@ jobs:
           python -m coverage xml
         if: "contains(env.USING_COVERAGE, matrix.python-version) && matrix.platform == 'ubuntu-20.04'"
 
-      - name: "Upload coverage to Codecov"
-        if: "contains(env.USING_COVERAGE, matrix.python-version) && matrix.platform == 'ubuntu-20.04'"
-        uses: "codecov/codecov-action@v1"
-        with:
-          fail_ci_if_error: true
 
   package:
     name: "Build & verify package"
@@ -77,6 +72,12 @@ jobs:
 
       - name: "Check long_description"
         run: "python -m twine check dist/*"
+
+      - uses: "actions/upload-artifact@v4"
+        with:
+          name: artifacts
+          path: ./dist/*
+
 
   install-dev:
     strategy:
